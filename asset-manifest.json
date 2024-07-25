@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/mr2-test-mods.js",
+    "../web-build/index.html": "/../web-build/index.html",
+    "mr2-test-mods.js.map": "/mr2-test-mods.js.map"
+  },
+  "entrypoints": [
+    "mr2-test-mods.js"
+  ]
+}
