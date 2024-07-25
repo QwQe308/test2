@@ -1,9 +1,13 @@
-name: CI
-on: [push]
+name: Build
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build:
-    name: Test
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +23,16 @@ jobs:
           cmd: install # will run `yarn install` command
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # if needed
+          
       - name: Build production bundle
         uses: borales/actions-yarn@v4
         with:
           cmd: build:dev # will run `yarn build:prod` command
+          
+      - name: Deploy on Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+    permissions:
+      contents: write
