@@ -1,3 +1,4 @@
+//test
 import { MR2Globals } from "magic-research-2-modding-sdk";
 import { loadBasicTestMod } from "./examples/BasicTestMod";
 import { loadBuffingPouchItemTestMod } from "./examples/BuffingPouchItemTestMod";
