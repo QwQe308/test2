@@ -172,7 +172,7 @@ export function loadElementCreationTestMod(MR2: MR2Globals) {
   // Create and load a shard (required because of Shard Stockpile Storyline)
   MR2.createAndLoadElementalShard(
     "Antimatter",
-    require("./image/antimatter.png"),
+    require("./image/Antimatter.png"),
     0.25,
   );
 
