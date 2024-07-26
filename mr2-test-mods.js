@@ -48,14 +48,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ADmod: () => (/* binding */ ADmod)
 /* harmony export */ });
-function ADmod(MR2) {
-  const allSpells = MR2.Spells.getAll();
-  const channelingSpells = allSpells.filter(spell => spell instanceof MR2.BasicChannelingSpellBase);
-  for (let spell of channelingSpells) {
-    MR2.Spells.delete(spell.getId());
-    MR2.Actions.delete(spell.getId());
-  }
-}
+function ADmod(MR2) {}
 
 /***/ }),
 
