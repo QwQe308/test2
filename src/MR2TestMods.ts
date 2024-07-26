@@ -1,16 +1,9 @@
 import { MR2Globals } from "magic-research-2-modding-sdk";
-import { loadBasicTestMod } from "./examples/BasicTestMod";
-import { loadBuffingPouchItemTestMod } from "./examples/BuffingPouchItemTestMod";
+import { ADmod } from "./mod/AntimatterDimensions";
 import {
   loadElementCreationTestMod,
   preloadElementCreationTestMod,
-} from "./examples/ElementCreationTestMod";
-import { loadEnemyTestMod } from "./examples/EnemyTestMod";
-import { loadEquippableWeaponTestMod } from "./examples/EquippableWeaponTestMod";
-import { loadSpellTestMod } from "./examples/SpellTestMod";
-import { loadStorylineAndBuildingTestMod } from "./examples/StorylineAndBuildingTestMod";
-import { loadUITestMod } from "./examples/UITestMod";
-import { loadWorldsMaxDifficultyTestMod } from "./examples/WorldsMaxDifficultyTestMod";
+} from "./mod/AntimatterElement";
 
 const PACKAGE = require("../package.json");
 
@@ -23,16 +16,8 @@ const PACKAGE = require("../package.json");
 export function load(MR2: MR2Globals) {
   MR2.alert("Loading mod", "Beginning to load");
 
-  loadBasicTestMod(MR2);
-  loadBuffingPouchItemTestMod(MR2);
-  loadEquippableWeaponTestMod(MR2);
-  loadSpellTestMod(MR2);
-  loadStorylineAndBuildingTestMod(MR2);
-  loadEnemyTestMod(MR2);
+  ADmod(MR2);
   loadElementCreationTestMod(MR2);
-  // loadElementOverrideTestMod(MR2);
-  loadUITestMod(MR2);
-  loadWorldsMaxDifficultyTestMod(MR2);
 }
 
 // In this function you will want to load things that could potentially affect
@@ -40,6 +25,7 @@ export function load(MR2: MR2Globals) {
 // The main purpose for this is to add new Elements or Resources.
 export function preload(MR2: MR2Globals) {
   MR2.alert("Preloading mod", "Beginning to preload");
+
   preloadElementCreationTestMod(MR2);
 }
 
