@@ -106,7 +106,7 @@ export function preloadElementCreationTestMod(MR2: MR2Globals) {
   };
 
   // Register the icon
-  const antimatterIcon = require("image/Antimatter.png");
+  const antimatterIcon = require("./image/Antimatter.png");
   MR2.registerGameIcon(ELEMENT_NAME.toLowerCase(), antimatterIcon);
   MR2.registerGameIcon("antimatteressence", antimatterIcon);
 
@@ -172,7 +172,7 @@ export function loadElementCreationTestMod(MR2: MR2Globals) {
   // Create and load a shard (required because of Shard Stockpile Storyline)
   MR2.createAndLoadElementalShard(
     "Antimatter",
-    require("./antimatter.png"),
+    require("./image/antimatter.png"),
     0.25,
   );
 
