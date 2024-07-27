@@ -148,7 +148,7 @@ export function loadElementCreationTestMod(MR2: MR2Globals) {
       return ELEMENT_NAME;
     }
     getDisplayDescription(state: GameState): string {
-      return "Channel some of your Mana into Antimatter Essence, a basic resource.";
+      return "Channel some of your Mana into Antimatter, a special resource.";
     }
     getLevelRequirements(): Partial<Record<SpellElementType, number>> {
       return {
@@ -157,11 +157,11 @@ export function loadElementCreationTestMod(MR2: MR2Globals) {
     }
     getManaCostProportion(): number {
       // Requires a lot of Mana
-      return 0.3;
+      return 0.1;
     }
     getBaseEssenceEfficiency(): number {
       // Produces a ton of Essence
-      return 10;
+      return 0.1;
     }
   }
 

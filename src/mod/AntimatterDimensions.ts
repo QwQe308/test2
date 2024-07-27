@@ -7,50 +7,60 @@ import { Building } from "magic-research-2-modding-sdk/modding-decs/backend/buil
 import { GameState } from "magic-research-2-modding-sdk/modding-decs/backend/GameState";
 import { Resource } from "magic-research-2-modding-sdk/modding-decs/backend/Resources";
 import { SpellElement } from "magic-research-2-modding-sdk/modding-decs/backend/spells/Elements";
+
 export function ADmod(MR2: MR2Globals) {
+  //wow
+  MR2.registerTransformation(
+    [[MR2.TransformationTags.ChannelingEfficiency, "channelFire"]],
+    "AD mod",
+    "AD mod",
+    MR2.TransformationType.Multiplier,
+    (state) => 0,
+  );
+  MR2.registerTransformation(
+    [[MR2.TransformationTags.ChannelingEfficiency, "channelEarth"]],
+    "AD mod",
+    "AD mod",
+    MR2.TransformationType.Multiplier,
+    (state) => 0,
+  );
+  MR2.registerTransformation(
+    [[MR2.TransformationTags.ChannelingEfficiency, "channelWater"]],
+    "AD mod",
+    "AD mod",
+    MR2.TransformationType.Multiplier,
+    (state) => 0,
+  );
+  MR2.registerTransformation(
+    [[MR2.TransformationTags.ChannelingEfficiency, "channelWind"]],
+    "AD mod",
+    "AD mod",
+    MR2.TransformationType.Multiplier,
+    (state) => 0,
+  );
+
   // Building
-  const calculateIncomePerGeyser = (state: GameState) =>
-    MR2.applyTransformationsCached(
+  const calculateIncome = (state: GameState) =>
+    MR2.applyTransformations(
       [MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"],
       state,
       20.0,
     );
-  const calculateExpensePerGeyser = (state: GameState) =>
-    MR2.applyTransformationsCached(
-      [
-        MR2.TransformationTags.Consumption,
-        MR2.Resource.EarthEssence,
-        "manaGeyser",
-      ],
-      state,
-      200.0,
-    );
-  const explainIncomePerGeyser = (state: GameState) =>
+  const explainIncome = (state: GameState) =>
     MR2.explainTransformationsText(
       [MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"],
       state,
       20.0,
       { unit: ":mana:" },
     );
-  const explainExpensePerGeyser = (state: GameState) =>
-    MR2.explainTransformationsText(
-      [
-        MR2.TransformationTags.Consumption,
-        MR2.Resource.EarthEssence,
-        "manaGeyser",
-      ],
-      state,
-      200.0,
-      { unit: ":earthessence:" },
-    );
 
   class ManaGeyser extends MR2.Building {
     getId(): string {
-      return "manaGeyser";
+      return "ad1";
     }
 
     getName(): string {
-      return "Mana Geyser";
+      return "1st Antimatter Dimension";
     }
 
     getBaseLandRequired(): number {
@@ -60,20 +70,17 @@ export function ADmod(MR2: MR2Globals) {
     canTurnOff(): boolean {
       return true;
     }
+
     getDisplayDescription(state: GameState): string {
-      return "A strong source of :mana:. Draws from the power of :earthessence:.";
+      return "A strong source of :antimatter:.";
     }
 
     getDisplayEffect(state: GameState): string {
-      const income = calculateIncomePerGeyser(state);
-      const expense = calculateExpensePerGeyser(state);
-      const incomeExplanation = explainIncomePerGeyser(state);
-      const expenseExplanation = explainExpensePerGeyser(state);
+      const income = calculateIncome(state);
+      const incomeExplanation = explainIncome(state);
       return `^${MR2.formatNumber(
         income,
-      )}^<${incomeExplanation}>:mana:/sec; ^-${MR2.formatNumber(
-        expense,
-      )}^<${expenseExplanation}>:earthessence:/sec`;
+      )}^<${incomeExplanation}>:antimatter:/sec`;
     }
   }
 
@@ -85,11 +92,7 @@ export function ADmod(MR2: MR2Globals) {
       manaGeyser.getName(),
       (state) => ({
         Mana:
-          calculateIncomePerGeyser(state) *
-          MR2.getBuildingAmountTurnedOn(state, manaGeyser),
-        EarthEssence:
-          -1 *
-          calculateExpensePerGeyser(state) *
+          calculateIncome(state) *
           MR2.getBuildingAmountTurnedOn(state, manaGeyser),
       }),
     ),
