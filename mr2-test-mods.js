@@ -49,20 +49,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   ADmod: () => (/* binding */ ADmod)
 /* harmony export */ });
 function ADmod(MR2) {
-  const calculateIncomePerGeyser = state => MR2.applyTransformationsCached([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0);
-  const calculateExpensePerGeyser = state => MR2.applyTransformationsCached([MR2.TransformationTags.Consumption, MR2.Resource.EarthEssence, "manaGeyser"], state, 200.0);
-  const explainIncomePerGeyser = state => MR2.explainTransformationsText([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0, {
+  MR2.registerTransformation([[MR2.TransformationTags.ChannelingEfficiency, "channelFire"]], "AD mod", "AD mod", MR2.TransformationType.Multiplier, state => 0);
+  MR2.registerTransformation([[MR2.TransformationTags.ChannelingEfficiency, "channelEarth"]], "AD mod", "AD mod", MR2.TransformationType.Multiplier, state => 0);
+  MR2.registerTransformation([[MR2.TransformationTags.ChannelingEfficiency, "channelWater"]], "AD mod", "AD mod", MR2.TransformationType.Multiplier, state => 0);
+  MR2.registerTransformation([[MR2.TransformationTags.ChannelingEfficiency, "channelWind"]], "AD mod", "AD mod", MR2.TransformationType.Multiplier, state => 0);
+  const calculateIncome = state => MR2.applyTransformations([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0);
+  const explainIncome = state => MR2.explainTransformationsText([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0, {
     unit: ":mana:"
-  });
-  const explainExpensePerGeyser = state => MR2.explainTransformationsText([MR2.TransformationTags.Consumption, MR2.Resource.EarthEssence, "manaGeyser"], state, 200.0, {
-    unit: ":earthessence:"
   });
   class ManaGeyser extends MR2.Building {
     getId() {
-      return "manaGeyser";
+      return "ad1";
     }
     getName() {
-      return "Mana Geyser";
+      return "1st Antimatter Dimension";
     }
     getBaseLandRequired() {
       return 1;
@@ -71,20 +71,17 @@ function ADmod(MR2) {
       return true;
     }
     getDisplayDescription(state) {
-      return "A strong source of :mana:. Draws from the power of :earthessence:.";
+      return "A strong source of :antimatter:.";
     }
     getDisplayEffect(state) {
-      const income = calculateIncomePerGeyser(state);
-      const expense = calculateExpensePerGeyser(state);
-      const incomeExplanation = explainIncomePerGeyser(state);
-      const expenseExplanation = explainExpensePerGeyser(state);
-      return `^${MR2.formatNumber(income)}^<${incomeExplanation}>:mana:/sec; ^-${MR2.formatNumber(expense)}^<${expenseExplanation}>:earthessence:/sec`;
+      const income = calculateIncome(state);
+      const incomeExplanation = explainIncome(state);
+      return `^${MR2.formatNumber(income)}^<${incomeExplanation}>:antimatter:/sec`;
     }
   }
   const manaGeyser = new ManaGeyser();
   MR2.IncomeOverTimeProducers.register(new MR2.IncomeOverTimeProducer(manaGeyser.getId(), manaGeyser.getName(), state => ({
-    Mana: calculateIncomePerGeyser(state) * MR2.getBuildingAmountTurnedOn(state, manaGeyser),
-    EarthEssence: -1 * calculateExpensePerGeyser(state) * MR2.getBuildingAmountTurnedOn(state, manaGeyser)
+    Mana: calculateIncome(state) * MR2.getBuildingAmountTurnedOn(state, manaGeyser)
   })));
   MR2.Buildings.register(manaGeyser);
   class BuildManaGeyser extends MR2.BuildingSpell {
@@ -270,7 +267,7 @@ function loadElementCreationTestMod(MR2) {
       return ELEMENT_NAME;
     }
     getDisplayDescription(state) {
-      return "Channel some of your Mana into Antimatter Essence, a basic resource.";
+      return "Channel some of your Mana into Antimatter, a special resource.";
     }
     getLevelRequirements() {
       return {
@@ -278,10 +275,10 @@ function loadElementCreationTestMod(MR2) {
       };
     }
     getManaCostProportion() {
-      return 0.3;
+      return 0.1;
     }
     getBaseEssenceEfficiency() {
-      return 10;
+      return 0.1;
     }
   }
   const channelAntimatter = new ChannelAntimatter();
