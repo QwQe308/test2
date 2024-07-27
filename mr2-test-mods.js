@@ -24,8 +24,8 @@ __webpack_require__.r(__webpack_exports__);
 const PACKAGE = __webpack_require__(/*! ../package.json */ "./package.json");
 function load(MR2) {
   MR2.alert("Loading mod", "Beginning to load");
-  (0,_mod_AntimatterDimensions__WEBPACK_IMPORTED_MODULE_0__.ADmod)(MR2);
   (0,_mod_AntimatterElement__WEBPACK_IMPORTED_MODULE_1__.loadElementCreationTestMod)(MR2);
+  (0,_mod_AntimatterDimensions__WEBPACK_IMPORTED_MODULE_0__.ADmod)(MR2);
 }
 function preload(MR2) {
   MR2.alert("Preloading mod", "Beginning to preload");
@@ -48,7 +48,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ADmod: () => (/* binding */ ADmod)
 /* harmony export */ });
-function ADmod(MR2) {}
+function ADmod(MR2) {
+  const calculateIncomePerGeyser = state => MR2.applyTransformationsCached([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0);
+  const calculateExpensePerGeyser = state => MR2.applyTransformationsCached([MR2.TransformationTags.Consumption, MR2.Resource.EarthEssence, "manaGeyser"], state, 200.0);
+  const explainIncomePerGeyser = state => MR2.explainTransformationsText([MR2.TransformationTags.Production, MR2.Resource.Mana, "manaGeyser"], state, 20.0, {
+    unit: ":mana:"
+  });
+  const explainExpensePerGeyser = state => MR2.explainTransformationsText([MR2.TransformationTags.Consumption, MR2.Resource.EarthEssence, "manaGeyser"], state, 200.0, {
+    unit: ":earthessence:"
+  });
+  class ManaGeyser extends MR2.Building {
+    getId() {
+      return "manaGeyser";
+    }
+    getName() {
+      return "Mana Geyser";
+    }
+    getBaseLandRequired() {
+      return 1;
+    }
+    canTurnOff() {
+      return true;
+    }
+    getDisplayDescription(state) {
+      return "A strong source of :mana:. Draws from the power of :earthessence:.";
+    }
+    getDisplayEffect(state) {
+      const income = calculateIncomePerGeyser(state);
+      const expense = calculateExpensePerGeyser(state);
+      const incomeExplanation = explainIncomePerGeyser(state);
+      const expenseExplanation = explainExpensePerGeyser(state);
+      return `^${MR2.formatNumber(income)}^<${incomeExplanation}>:mana:/sec; ^-${MR2.formatNumber(expense)}^<${expenseExplanation}>:earthessence:/sec`;
+    }
+  }
+  const manaGeyser = new ManaGeyser();
+  MR2.IncomeOverTimeProducers.register(new MR2.IncomeOverTimeProducer(manaGeyser.getId(), manaGeyser.getName(), state => ({
+    Mana: calculateIncomePerGeyser(state) * MR2.getBuildingAmountTurnedOn(state, manaGeyser),
+    EarthEssence: -1 * calculateExpensePerGeyser(state) * MR2.getBuildingAmountTurnedOn(state, manaGeyser)
+  })));
+  MR2.Buildings.register(manaGeyser);
+  class BuildManaGeyser extends MR2.BuildingSpell {
+    getBuilding() {
+      return manaGeyser;
+    }
+    getAreas() {
+      return {
+        HOME: [MR2.ActionSubcategories.MANA]
+      };
+    }
+    getBaseResourceCost() {
+      return {
+        WaterEssence: 500,
+        EarthEssence: 500
+      };
+    }
+    getBaseResourceScale() {
+      return {
+        WaterEssence: 1.4,
+        EarthEssence: 1.2
+      };
+    }
+    getBaseAlternateLandUnawareBuildingAmount() {
+      return 2;
+    }
+    isVisible(state) {
+      return true;
+    }
+    getLevelRequirements() {
+      return {
+        Earth: 1
+      };
+    }
+    getElement() {
+      return MR2.SpellElement.Earth;
+    }
+  }
+  const buildManaGeyser = new BuildManaGeyser();
+  MR2.BuildingAmountListeners.register((state, building) => {
+    if (building == manaGeyser) {
+      state = MR2.clearCalculatedIncomeCache(state);
+    }
+    return state;
+  });
+  MR2.registerSpell(buildManaGeyser);
+}
 
 /***/ }),
 
@@ -158,13 +241,13 @@ function preloadElementCreationTestMod(MR2) {
   };
   const antimatterIcon = __webpack_require__(/*! ./image/Antimatter.png */ "./src/mod/image/Antimatter.png");
   MR2.registerGameIcon(ELEMENT_NAME.toLowerCase(), antimatterIcon);
-  MR2.registerGameIcon("antimatteressence", antimatterIcon);
+  MR2.registerGameIcon("antimatter", antimatterIcon);
   MR2.registerResource(RESOURCE_NAME, {
     id: RESOURCE_NAME,
     name: "Antimatter",
     resourceInfo: {
       baseCap: Number.MAX_SAFE_INTEGER,
-      icon: "antimatteressence"
+      icon: "antimatter"
     }
   });
   MR2.registerSpellElement({
@@ -206,7 +289,7 @@ function loadElementCreationTestMod(MR2) {
   MR2.registerChannelingSpellForElement("Antimatter", channelAntimatter);
   MR2.createAndLoadElementalShard("Antimatter", __webpack_require__(/*! ./image/Antimatter.png */ "./src/mod/image/Antimatter.png"), 0.25);
   MR2.SaveDataCompatibilityTransforms.register(state => {
-    state = MR2.partiallyUnlockElement(ELEMENT_NAME)(state);
+    state = MR2.unlockElement(ELEMENT_NAME)(state);
     return state;
   }, "antimatterUnlocker");
 }
