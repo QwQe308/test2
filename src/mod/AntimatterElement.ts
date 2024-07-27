@@ -108,7 +108,7 @@ export function preloadElementCreationTestMod(MR2: MR2Globals) {
   // Register the icon
   const antimatterIcon = require("./image/Antimatter.png");
   MR2.registerGameIcon(ELEMENT_NAME.toLowerCase(), antimatterIcon);
-  MR2.registerGameIcon("antimatteressence", antimatterIcon);
+  MR2.registerGameIcon("antimatter", antimatterIcon);
 
   // Register the resource
   MR2.registerResource(RESOURCE_NAME, {
@@ -116,7 +116,7 @@ export function preloadElementCreationTestMod(MR2: MR2Globals) {
     name: "Antimatter",
     resourceInfo: {
       baseCap: Number.MAX_SAFE_INTEGER,
-      icon: "antimatteressence",
+      icon: "antimatter",
     },
   });
 
@@ -179,7 +179,7 @@ export function loadElementCreationTestMod(MR2: MR2Globals) {
   // Finally, if we load a save file where Exploration is already unlocked,
   // we will need to partially unlock it
   MR2.SaveDataCompatibilityTransforms.register((state) => {
-    state = MR2.partiallyUnlockElement(ELEMENT_NAME)(state);
+    state = MR2.unlockElement(ELEMENT_NAME)(state);
     return state;
   }, "antimatterUnlocker");
 }

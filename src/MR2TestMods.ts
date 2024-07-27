@@ -16,8 +16,8 @@ const PACKAGE = require("../package.json");
 export function load(MR2: MR2Globals) {
   MR2.alert("Loading mod", "Beginning to load");
 
-  ADmod(MR2);
   loadElementCreationTestMod(MR2);
+  ADmod(MR2);
 }
 
 // In this function you will want to load things that could potentially affect
